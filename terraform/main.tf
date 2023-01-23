@@ -4,13 +4,13 @@ provider "aws" {
 }
 
 
-# terraform {
-#   backend "s3" {
-#     bucket = "[YOUR_REMOTE_STATE_BUCKET_NAME]"
-#     key    = "[YOUR_REMOTE_STATE_KEY]"
-#     region = "eu-central-1"
-#   }
-# }
+terraform {
+  backend "s3" {
+    bucket = "elviskemayo-bucket"
+    key    = "bucket-test"
+    region = "us-east-1"
+  }
+}
 
 resource "aws_s3_bucket" "s3Bucket" {
   bucket = "obirene"
