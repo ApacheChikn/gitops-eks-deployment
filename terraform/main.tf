@@ -6,7 +6,7 @@
 
 # terraform {
 #   backend "s3" {
-#     bucket = "elviskemayo-bucket"
+#     bucket = "lov-rene-n2"
 #     key    = "bucket-test"
 #     region = "us-east-1"
 #   }

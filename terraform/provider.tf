@@ -33,3 +33,11 @@ provider "kubernetes" {
   host                   = module.eks.cluster_endpoint
   cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
 }
+
+terraform {
+  backend "s3" {
+    bucket = "lov-rene-n2"
+    key    = "bucket-test"
+    region = "us-east-1"
+  }
+}
