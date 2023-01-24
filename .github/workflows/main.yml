@@ -1,73 +1,107 @@
+# # name: Deploy Infrastructure
+
+# # on:
+# #   push:
+# #     branches:
+# #       - main
+
+# # jobs:
+# #   tf_fmt:
+# #     name: Deploy Site
+# #     runs-on: ubuntu-latest
+# #     steps:
+
+# #     - name: Checkout Repo
+# #       uses: actions/checkout@v1
+
+# #     - name: Terraform Init
+# #       uses: hashicorp/terraform-github-actions/init@v0.4.0
+# #       env:
+# #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+# #         TF_ACTION_WORKING_DIR: 'terraform'
+# #         AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
+# #         AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+# #     - name: Terraform Validate
+# #       uses: hashicorp/terraform-github-actions/validate@v0.3.7
+
+# #     - name: Terraform Destroy
+# #       uses: hashicorp/terraform-github-actions/destroy@v0.4.0
+# #       env:
+# #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+# #         TF_ACTION_WORKING_DIR: 'terraform'
+# #         AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
+# #         AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+# #     # - name: Sync S3
+# #     #   uses: jakejarvis/s3-sync-action@master
+# #     #   env:
+# #     #     SOURCE_DIR: './src'
+# #     #     AWS_REGION: 'us-east-1'
+# #     #     AWS_S3_BUCKET: 'obirene'
+# #     #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+# #     #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
 # name: Deploy Infrastructure
 
 # on:
 #   push:
 #     branches:
 #       - main
+# # workflow_dispatch:
+#   #   inputs:
+#   #     # Working directory input from user.
+#   #     resource:
+#   #       type: choice
+#   #       description: Choose the resource
+#   #       options:
+#   #       - terraform      
+#   #     # Terraform action you want to perform
+#   #     action:
+#   #       description: 'Terraform Action to Perform'
+#   #       type: choice
+#   #       options:
+#   #       #- Terraform_apply
+#   #       - Terraform_destroy
 
-# jobs:
-#   tf_fmt:
-#     name: Deploy Site
-#     runs-on: ubuntu-latest
-#     steps:
+# # jobs:
+# #   terraform_apply:
+# #     name: "Terraform_apply"
+# #     #if: ${{ github.event.inputs.action == 'Terraform_apply' }}
+# #     runs-on: ubuntu-latest
+# #     defaults:
+# #       run:
+# #         working-directory: 'terraform'
+# #     steps:
+# #       - name: Checkout
+# #         uses: actions/checkout@v2
 
-#     - name: Checkout Repo
-#       uses: actions/checkout@v1
+# #       - name: Setup Terraform
+# #         uses: hashicorp/setup-terraform@v1
 
-#     - name: Terraform Init
-#       uses: hashicorp/terraform-github-actions/init@v0.4.0
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         TF_ACTION_WORKING_DIR: 'terraform'
-#         AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
-#         AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+# #       - name: Terraform Init
+# #         id: init
+# #         run: terraform init
+# #         env:
+# #             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+# #             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+# #             AWS_DEFAULT_REGION: ${{ secrets.REGION }}
+      
+# #       - name: Terraform Validate
+# #         id: validate
+# #         run: terraform validate -no-color
 
-#     - name: Terraform Validate
-#       uses: hashicorp/terraform-github-actions/validate@v0.3.7
-
-#     - name: Terraform Destroy
-#       uses: hashicorp/terraform-github-actions/destroy@v0.4.0
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         TF_ACTION_WORKING_DIR: 'terraform'
-#         AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
-#         AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-#     # - name: Sync S3
-#     #   uses: jakejarvis/s3-sync-action@master
-#     #   env:
-#     #     SOURCE_DIR: './src'
-#     #     AWS_REGION: 'us-east-1'
-#     #     AWS_S3_BUCKET: 'obirene'
-#     #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#     #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-name: Deploy Infrastructure
-
-on:
-  push:
-    branches:
-      - main
-# workflow_dispatch:
-  #   inputs:
-  #     # Working directory input from user.
-  #     resource:
-  #       type: choice
-  #       description: Choose the resource
-  #       options:
-  #       - terraform      
-  #     # Terraform action you want to perform
-  #     action:
-  #       description: 'Terraform Action to Perform'
-  #       type: choice
-  #       options:
-  #       #- Terraform_apply
-  #       - Terraform_destroy
-
-# jobs:
-#   terraform_apply:
-#     name: "Terraform_apply"
-#     #if: ${{ github.event.inputs.action == 'Terraform_apply' }}
+# #       - name: Terraform Apply
+# #         id: apply
+# #         run: terraform apply -auto-approve 
+# #         env:
+# #             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+# #             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+# #             AWS_DEFAULT_REGION: ${{ secrets.REGION }}
+# jobs:  
+#   terraform_destroy:
+#     name: "Terraform_destroy"
+#     #if: ${{ github.event.inputs.action == 'Terraform_destroy' }}
 #     runs-on: ubuntu-latest
 #     defaults:
 #       run:
@@ -87,45 +121,44 @@ on:
 #             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 #             AWS_DEFAULT_REGION: ${{ secrets.REGION }}
       
-#       - name: Terraform Validate
-#         id: validate
-#         run: terraform validate -no-color
-
-#       - name: Terraform Apply
-#         id: apply
-#         run: terraform apply -auto-approve 
+#       - name: Terraform Destroy
+#         id: destroy
+#         working-directory: 'terraform'
+#         run: terraform destroy -auto-approve 
 #         env:
 #             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
 #             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 #             AWS_DEFAULT_REGION: ${{ secrets.REGION }}
-jobs:  
-  terraform_destroy:
-    name: "Terraform_destroy"
-    #if: ${{ github.event.inputs.action == 'Terraform_destroy' }}
+
+
+name: EKS CLUSTER CREATION
+
+on: push
+
+jobs:
+  deploy-terraform:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: 'terraform'
+        working-directory: ./terraform
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-
-      - name: Terraform Init
-        id: init
-        run: terraform init
-        env:
-            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            AWS_DEFAULT_REGION: ${{ secrets.REGION }}
-      
-      - name: Terraform Destroy
-        id: destroy
-        working-directory: 'terraform'
-        run: terraform destroy -auto-approve 
-        env:
-            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            AWS_DEFAULT_REGION: ${{ secrets.REGION }}
+    - name: Install Terraform
+      id: install-terraform
+      run: wget -O terraform.zip https://releases.hashicorp.com/terraform/1.0.3/terraform_1.0.3_linux_amd64.zip && unzip terraform.zip && chmod +x terraform && sudo mv terraform /usr/local/bin
+    - name: Apply Terraform
+      id: apply-terraform
+      run: terraform init && terraform apply -auto-approve 
+      env:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
