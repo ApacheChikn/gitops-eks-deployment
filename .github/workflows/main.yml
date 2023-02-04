@@ -157,7 +157,7 @@ jobs:
       run: wget -O terraform.zip https://releases.hashicorp.com/terraform/1.0.3/terraform_1.0.3_linux_amd64.zip && unzip terraform.zip && chmod +x terraform && sudo mv terraform /usr/local/bin
     - name: Apply Terraform
       id: apply-terraform
-      run: terraform init && terraform apply -auto-approve 
+      run: terraform init && terraform destroy -auto-approve 
       env:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
