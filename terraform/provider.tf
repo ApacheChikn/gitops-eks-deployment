@@ -38,6 +38,6 @@ terraform {
   backend "s3" {
     bucket = "git-ops-eks-bucket"
     key    = "bucket-test"
-    region = "us-west-2"
+    region = "us-east-1"
   }
 }
