@@ -36,7 +36,7 @@ provider "kubernetes" {
 
 terraform {
   backend "s3" {
-    bucket = "git-ops-eks-bucket"
+    bucket = "eks-test-bucket2"
     key    = "bucket-test"
     region = "us-east-1"
   }
